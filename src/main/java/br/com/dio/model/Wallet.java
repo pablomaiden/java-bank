@@ -17,7 +17,7 @@ public abstract class Wallet {
     protected final List<Money> money;
 
     public Wallet(final BankService serviceType) {
-        this.serviceType = serviceType;
+        this.service = serviceType;
         this.money = new ArrayList<>();
     }
 
@@ -40,7 +40,7 @@ public abstract class Wallet {
     public List<Money> reduceMoney(final long amount){
         List<Money> toRemove = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
-            toRemove.add(this.money.remove);
+            //toRemove.add(this.money.remove);
         }
         return toRemove;
     }

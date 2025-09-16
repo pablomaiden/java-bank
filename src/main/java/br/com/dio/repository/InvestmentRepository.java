@@ -13,11 +13,11 @@ import static br.com.dio.repository.CommonsRepository.checkeFundsForTransaction;
 
 public class InvestmentRepository {
 
-    private long nextId;
+    private long nextId=0;
     private final List<Investment> investments = new ArrayList<>();
     private final List<InvestmentWallet> wallets = new ArrayList<>();
 
-    public Investment create(final long tax, final long daysToRest, final long initialFunds){
+    public Investment create(final long tax,final long initialFunds){
         this.nextId++;
         var investment = new Investment(nextId,tax,initialFunds);
         investments.add(investment);
@@ -27,10 +27,8 @@ public class InvestmentRepository {
     public InvestmentWallet initInvestment(final AccountWallet account, final String id) {
 
         var accountUse =  wallets.stream().map(InvestmentWallet::getAccount).toList();
-        for(int i = 0; i < accountUse.size(); i++){
-            if(accountUse.contains(accountUse.get(i))){
-                throw new AccountWithInvestmentException("Pix"+accountUse.get(i)+"já está em uso");
-            }
+        if(accountUse.contains(account)){
+            throw new AccountWithInvestmentException("Pix"+account+"já está em uso");
         }
 
         var investment = findById(id);
@@ -58,21 +56,21 @@ public class InvestmentRepository {
     }
 
     public void updateAmmount(final long percent){
-        wallets.forEach(w-> w.updateAmount(percent));
+        //wallets.forEach(w-> w.updateAmount(percent));
     }
 
     public Investment findById(final String pix){
-        return wallets.stream()
-                .filter(w-> w.get)
-                .findFirst()
-                .ifPresentOrElse(()-> new InvestmentNotFoundException("A carteira não foi encontrada"));
+        return null;//wallets.stream()
+                //.filter(w-> w.get)
+                //.findFirst()
+                //.ifPresentOrElse(()-> new InvestmentNotFoundException("A carteira não foi encontrada"));
     }
 
     public InvestmentWallet findByAccountPix(final String pix){
-        return wallets.stream()
-                .filter(w-> w.get)
-                .findFirst()
-                .ifPresentOrElse(()-> new WalletNotFoundException("A carteira não foi encontrada"));
+        return null;//wallets.stream()
+                //.filter(w-> w.get)
+                //.findFirst()
+                //.ifPresentOrElse(()-> new WalletNotFoundException("A carteira não foi encontrada"));
     }
 
     public List<Investment> list(){
