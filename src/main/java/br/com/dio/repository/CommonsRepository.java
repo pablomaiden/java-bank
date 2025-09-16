@@ -2,10 +2,7 @@ package br.com.dio.repository;
 
 
 import br.com.dio.exception.NoFundsEnoughtException;
-import br.com.dio.model.AccountWallet;
-import br.com.dio.model.BankService;
-import br.com.dio.model.Money;
-import br.com.dio.model.MoneyAudit;
+import br.com.dio.model.*;
 import lombok.AllArgsConstructor;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -26,6 +23,12 @@ public final class CommonsRepository {
     public static List<Money> generateMoney(final UUID transactionId, final long funds, final String description){
         var history = new MoneyAudit(transactionId, BankService.ACCOUNT, description, OffsetDateTime.now());
         return Stream.generate(()-> new Money(history)).limit(funds).toList();
+    }
+
+    public static void checkeFundsForTransaction(InvestmentWallet soruce, long amount) {
+        if(soruce.getFunds()<amount){
+            throw new NoFundsEnoughtException("Sua conta não tem dinheiro o suficiente para realizar essa transação");
+        }
     }
 
 }

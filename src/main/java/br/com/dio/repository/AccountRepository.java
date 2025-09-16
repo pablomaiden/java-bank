@@ -1,6 +1,7 @@
 package br.com.dio.repository;
 
 import br.com.dio.exception.AccountFoundException;
+import br.com.dio.exception.PixUseException;
 import br.com.dio.model.AccountWallet;
 
 import java.util.List;
@@ -18,6 +19,14 @@ public class AccountRepository {
     }
 
     public AccountWallet create(final List<String> pix, final long initialFunds){
+
+        var pixUse =  accounts.stream().flatMap(a -> a.getPix().stream()).toList();
+        for(int i = 0; i < pix.size(); i++){
+            if(pixUse.contains(pix.get(i))){
+                throw new PixUseException("Pix"+pix.get(i)+"já está em uso");
+            }
+        }
+
         var newAccount = new AccountWallet(initialFunds, pix);
         accounts.add(newAccount);
         return newAccount;
@@ -38,7 +47,7 @@ public class AccountRepository {
     public void transferMoney(final String sourcePix, final String targetPix, final long amount){
         var source = findByPix(sourcePix);
         checkeFundsForTransaction(source,amount);
-        var target = findByPix(sourcePix);
+        var target = findByPix(targetPix);
         var message = "pix enviado de '"+ sourcePix +"' para '"+targetPix;
         target.addMoney(source.reduceMoney(amount), source.getService(),message);
     }
